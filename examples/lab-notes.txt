@@ -1,0 +1,42 @@
+Lab notes — mkcert for Mere Mortals
+====================================
+
+Tool under test : mkcert 1.4.4 (official linux/amd64 binary)
+Machine         : Ubuntu 24.04 sandbox, OpenSSL 3.0.13,
+                  curl 8.5.0, Python 3.12.3, certutil present
+
+The fence
+---------
+HOME, CAROOT and the NSS database were placed in a scratch
+folder and every install/uninstall ran with TRUST_STORES=nss,
+so the sandbox's real trust stores were never written. The
+system store was checked afterwards by root fingerprint and
+was unchanged. Running as root, mkcert still *tried* the
+system NSS database /etc/pki/nssdb and was refused
+(read-only) — that failure is transcript t02, kept whole.
+
+Servers
+-------
+mkcert-lab/server/serve_https.py served the example.test
+certificate on 127.0.0.1:18443, the localhost certificate on
+:18444 and the wildcard certificate on :18445. Every curl in
+the transcripts uses --resolve, because the lab did not edit
+/etc/hosts (outside its fence) and the sandbox's DNS answers
+.test names with an intercepted address (see t06).
+
+Terms found, from the certificates themselves
+---------------------------------------------
+root  : 10 years, CA:TRUE pathlen:0, key usage Certificate Sign
+leaf  : 2 years 3 months, SANs as issued, EKU server auth
+client: EKU client + server auth (mkcert -client)
+
+Persistent quirks worth a reader's warning
+------------------------------------------
+- The "CA is not installed in the Firefox and/or
+  Chrome/Chromium trust store" warning keys off browser
+  stores mkcert can find; with no Firefox profile present it
+  kept printing after a proved NSS install.
+- curl 8.5 (this build) ignored SSL_CERT_FILE pointing at
+  the root while honouring the same file via --cacert.
+- -uninstall empties the stores and leaves CAROOT whole,
+  key included. Retirement = uninstall + delete CAROOT.

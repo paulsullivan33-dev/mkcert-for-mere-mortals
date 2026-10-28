@@ -1,0 +1,44 @@
+$ curl -sS --resolve example.test:18443:127.0.0.1 https://example.test:18443/
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+exit: 60
+
+$ curl -sS --cacert $CAROOT/rootCA.pem --resolve example.test:18443:127.0.0.1 https://example.test:18443/
+Hello from the mkcert lab server.
+If your client shows this without a warning, it trusted the certificate.
+exit: 0
+
+$ echo | openssl s_client -connect 127.0.0.1:18443 -servername example.test 2>/dev/null | grep -E '^(subject|issuer|Verify return code)'
+subject=O = mkcert development certificate, OU = root@htch-runtime
+issuer=O = mkcert development CA, OU = root@htch-runtime, CN = mkcert root@htch-runtime
+Verify return code: 21 (unable to verify the first certificate)
+exit: 0
+
+$ echo | openssl s_client -connect 127.0.0.1:18443 -servername example.test -CAfile $CAROOT/rootCA.pem 2>/dev/null | grep -E '^(subject|issuer|Verify return code)'
+subject=O = mkcert development certificate, OU = root@htch-runtime
+issuer=O = mkcert development CA, OU = root@htch-runtime, CN = mkcert root@htch-runtime
+Verify return code: 0 (ok)
+exit: 0
+
+$ python3 server/check_https.py https://localhost:18444/
+FAILED: URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>
+exit: 1
+
+$ python3 server/check_https.py https://localhost:18444/ $CAROOT/rootCA.pem
+HTTP 200
+Hello from the mkcert lab server.
+If your client shows this without a warning, it trusted the certificate.
+exit: 0
+
+$ tail -3 server.log; tail -3 server-b.log
+serving on https://127.0.0.1:18443 with cert certs/example.test+1.pem
+server saw: GET / HTTP/1.1
+server saw: GET / HTTP/1.1
+serving on https://127.0.0.1:18444 with cert certs/localhost+2.pem
+server saw: GET / HTTP/1.1
+exit: 0
+

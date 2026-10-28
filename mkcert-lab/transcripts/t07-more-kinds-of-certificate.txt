@@ -1,0 +1,68 @@
+$ mkcert -pkcs12 example.test
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "example.test"
+
+The PKCS#12 bundle is at "./example.test.p12" ✅
+
+The legacy PKCS#12 encryption password is the often hardcoded default "changeit" ℹ️
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ mkcert -ecdsa ecdsa.example.test
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "ecdsa.example.test"
+
+The certificate is at "./ecdsa.example.test.pem" and the key at "./ecdsa.example.test-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ openssl x509 -in ecdsa.example.test.pem -noout -text | grep -E 'Public Key Algorithm|NIST|ASN1 OID' | head -3
+            Public Key Algorithm: id-ecPublicKey
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+exit: 0
+
+$ mkcert -client laptop-client
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "laptop-client"
+
+The certificate is at "./laptop-client-client.pem" and the key at "./laptop-client-client-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ openssl x509 -in laptop-client-client.pem -noout -ext extendedKeyUsage -ext subjectAltName 2>/dev/null || openssl x509 -in laptop-client-client.pem -noout -text | grep -A1 'Extended Key'
+X509v3 Subject Alternative Name: 
+    DNS:laptop-client
+exit: 0
+
+$ ls example.test.p12 ecdsa.example.test.pem laptop-client-client.pem
+ecdsa.example.test.pem
+example.test.p12
+laptop-client-client.pem
+exit: 0
+
+$ openssl x509 -in laptop-client-client.pem -noout -ext extendedKeyUsage
+X509v3 Extended Key Usage: 
+    TLS Web Client Authentication, TLS Web Server Authentication
+exit: 0
+
+$ openssl x509 -in example.test+1.pem -noout -ext extendedKeyUsage
+X509v3 Extended Key Usage: 
+    TLS Web Server Authentication
+exit: 0
+

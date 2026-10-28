@@ -1,0 +1,79 @@
+$ mkcert localhost 127.0.0.1 ::1
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "localhost"
+ - "127.0.0.1"
+ - "::1"
+
+The certificate is at "./localhost+2.pem" and the key at "./localhost+2-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ mkcert example.test www.example.test
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "example.test"
+ - "www.example.test"
+
+The certificate is at "./example.test+1.pem" and the key at "./example.test+1-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ mkcert "*.example.test"
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "*.example.test"
+
+Reminder: X.509 wildcards only go one level deep, so this won't match a.b.example.test ℹ️
+
+The certificate is at "./_wildcard.example.test.pem" and the key at "./_wildcard.example.test-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ ls -la
+total 32
+drwxrwx--- 1 root root  328 Oct 28 18:42 .
+drwxrwx--- 1 root root   10 Oct 28 18:41 ..
+-rw------- 1 root root 1704 Oct 28 18:42 _wildcard.example.test-key.pem
+-rw-r----- 1 root root 1472 Oct 28 18:42 _wildcard.example.test.pem
+-rw------- 1 root root 1708 Oct 28 18:42 devbox.test-key.pem
+-rw-r----- 1 root root 1468 Oct 28 18:42 devbox.test.pem
+-rw------- 1 root root 1708 Oct 28 18:42 example.test+1-key.pem
+-rw-r----- 1 root root 1493 Oct 28 18:42 example.test+1.pem
+-rw------- 1 root root 1708 Oct 28 18:42 localhost+2-key.pem
+-rw-r----- 1 root root 1497 Oct 28 18:42 localhost+2.pem
+exit: 0
+
+$ openssl x509 -in localhost+2.pem -noout -dates -ext subjectAltName
+notBefore=Oct 28 18:42:27 2026 GMT
+notAfter=Jan 28 18:42:27 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:localhost, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+exit: 0
+
+$ openssl x509 -in example.test+1.pem -noout -dates -ext subjectAltName
+notBefore=Oct 28 18:42:27 2026 GMT
+notAfter=Jan 28 18:42:27 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:example.test, DNS:www.example.test
+exit: 0
+
+$ openssl x509 -in _wildcard.example.test.pem -noout -dates -ext subjectAltName
+notBefore=Oct 28 18:42:28 2026 GMT
+notAfter=Jan 28 18:42:28 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:*.example.test
+exit: 0
+

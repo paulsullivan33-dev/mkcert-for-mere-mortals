@@ -1,0 +1,33 @@
+$ certutil -L -d sql:$HOME/.pki/nssdb
+
+Certificate Nickname                                         Trust Attributes
+                                                             SSL,S/MIME,JAR/XPI
+
+mkcert development CA 191951115509817768213928530382616763936 C,,  
+exit: 0
+
+$ mkcert -uninstall
+The local CA is now uninstalled from the Firefox and/or Chrome/Chromium trust store(s)! 👋
+
+exit: 0
+
+$ certutil -L -d sql:$HOME/.pki/nssdb
+
+Certificate Nickname                                         Trust Attributes
+                                                             SSL,S/MIME,JAR/XPI
+
+exit: 0
+
+$ ls -la $CAROOT
+total 8
+drwxrwx--- 1 root root   48 Oct 28 18:42 .
+drwxrwx--- 1 root root   88 Oct 28 18:41 ..
+-r-------- 1 root root 2484 Oct 28 18:42 rootCA-key.pem
+-rw-r----- 1 root root 1639 Oct 28 18:42 rootCA.pem
+exit: 0
+
+$ curl -sS --cacert $CAROOT/rootCA.pem --resolve example.test:18443:127.0.0.1 https://example.test:18443/
+Hello from the mkcert lab server.
+If your client shows this without a warning, it trusted the certificate.
+exit: 0
+

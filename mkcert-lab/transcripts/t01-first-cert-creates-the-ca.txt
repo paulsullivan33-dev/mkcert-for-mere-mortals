@@ -1,0 +1,53 @@
+$ pwd; mkcert devbox.test
+/home/hatch/workspace/build-check/mkcert-scratch/lab/certs
+Created a new local CA 💥
+Note: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store.
+Run "mkcert -install" for certificates to be trusted automatically ⚠️
+
+Created a new certificate valid for the following names 📜
+ - "devbox.test"
+
+The certificate is at "./devbox.test.pem" and the key at "./devbox.test-key.pem" ✅
+
+It will expire on 28 January 2029 🗓
+
+exit: 0
+
+$ ls -la $CAROOT .
+.:
+total 8
+drwxrwx--- 1 root root   68 Oct 28 18:42 .
+drwxrwx--- 1 root root   10 Oct 28 18:41 ..
+-rw------- 1 root root 1708 Oct 28 18:42 devbox.test-key.pem
+-rw-r----- 1 root root 1468 Oct 28 18:42 devbox.test.pem
+
+/home/hatch/workspace/build-check/mkcert-scratch/caroot:
+total 8
+drwxrwx--- 1 root root   48 Oct 28 18:42 .
+drwxrwx--- 1 root root   88 Oct 28 18:41 ..
+-r-------- 1 root root 2484 Oct 28 18:42 rootCA-key.pem
+-rw-r----- 1 root root 1639 Oct 28 18:42 rootCA.pem
+exit: 0
+
+$ openssl x509 -in $CAROOT/rootCA.pem -noout -subject -issuer -dates -ext basicConstraints -ext keyUsage
+subject=O = mkcert development CA, OU = root@htch-runtime, CN = mkcert root@htch-runtime
+issuer=O = mkcert development CA, OU = root@htch-runtime, CN = mkcert root@htch-runtime
+notBefore=Oct 28 18:42:03 2026 GMT
+notAfter=Oct 28 18:42:03 2036 GMT
+X509v3 Key Usage: critical
+    Certificate Sign
+exit: 0
+
+$ openssl x509 -in $CAROOT/rootCA.pem -noout -fingerprint -sha256
+sha256 Fingerprint=73:D4:ED:D3:3B:7D:28:40:2E:A3:47:D9:31:9C:3D:4F:B2:2F:57:56:49:D6:86:4F:90:18:9D:5E:16:74:48:6C
+exit: 0
+
+$ openssl x509 -in devbox.test.pem -noout -subject -issuer -dates -ext subjectAltName
+subject=O = mkcert development certificate, OU = root@htch-runtime
+issuer=O = mkcert development CA, OU = root@htch-runtime, CN = mkcert root@htch-runtime
+notBefore=Oct 28 18:42:03 2026 GMT
+notAfter=Jan 28 18:42:03 2029 GMT
+X509v3 Subject Alternative Name: 
+    DNS:devbox.test
+exit: 0
+

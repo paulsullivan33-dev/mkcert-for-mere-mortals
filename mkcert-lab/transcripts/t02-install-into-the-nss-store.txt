@@ -1,0 +1,33 @@
+$ certutil -N -d sql:$HOME/.pki/nssdb --empty-password
+exit: 0
+
+$ certutil -L -d sql:$HOME/.pki/nssdb
+
+Certificate Nickname                                         Trust Attributes
+                                                             SSL,S/MIME,JAR/XPI
+
+exit: 0
+
+$ mkcert -install
+ERROR: failed to execute "certutil -A -d sql:/etc/pki/nssdb": exit status 255
+
+certutil: function failed: SEC_ERROR_READ_ONLY: security library: read-only database.
+
+exit: 1
+
+$ certutil -L -d sql:$HOME/.pki/nssdb
+
+Certificate Nickname                                         Trust Attributes
+                                                             SSL,S/MIME,JAR/XPI
+
+mkcert development CA 191951115509817768213928530382616763936 C,,  
+exit: 0
+
+$ grep for the root fingerprint in /etc/ssl/certs/ca-certificates.crt
+not present - the system trust store is unchanged
+
+$ openssl x509 -in $CAROOT/rootCA.pem -noout -ext basicConstraints
+X509v3 Basic Constraints: critical
+    CA:TRUE, pathlen:0
+exit: 0
+

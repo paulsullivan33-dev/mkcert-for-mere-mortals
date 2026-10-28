@@ -1,0 +1,19 @@
+$ python3 server/serve_https.py certs/example.test+1.pem certs/example.test+1-key.pem &
+$ cat server.log
+serving on https://127.0.0.1:18443 with cert certs/example.test+1.pem
+exit: 0
+
+$ ss -tlnp | grep 18443 || netstat -tlnp 2>/dev/null | grep 18443
+LISTEN 0      0          127.0.0.1:18443      0.0.0.0:*    users:(("python3",pid=107297,fd=3))
+exit: 0
+
+$ python3 server/serve_https.py certs/localhost+2.pem certs/localhost+2-key.pem 18444 &
+$ cat server-b.log
+serving on https://127.0.0.1:18444 with cert certs/localhost+2.pem
+exit: 0
+
+$ ss -tlnp | grep -E '1844[34]'
+LISTEN 0      0          127.0.0.1:18443      0.0.0.0:*    users:(("python3",pid=107297,fd=3))
+LISTEN 0      0          127.0.0.1:18444      0.0.0.0:*    users:(("python3",pid=107649,fd=3))
+exit: 0
+

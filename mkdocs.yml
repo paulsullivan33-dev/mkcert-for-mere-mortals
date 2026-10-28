@@ -1,0 +1,29 @@
+site_name: mkcert for Mere Mortals
+site_description: A certificate authority of your own for local development. Installing a root your tools will trust, issuing certificates for localhost and test names, serving HTTPS on your own machine without warnings, and removing the authority cleanly afterwards, with the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/mkcert-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What mkcert Is: what-mkcert-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing mkcert: installing-mkcert.md
+  - Your First Certificate: your-first-certificate.md
+  - Installing the CA: installing-the-ca.md
+  - Reading a Certificate: reading-a-certificate.md
+  - Serving HTTPS Locally: serving-https-locally.md
+  - Teaching Clients to Trust: teaching-clients-to-trust.md
+  - Names, Wildcards and Addresses: names-and-wildcards.md
+  - More Kinds of Certificate: more-kinds-of-certificate.md
+  - Removing the CA: removing-the-ca.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

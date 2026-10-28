@@ -1,0 +1,51 @@
+$ mkcert -version
+v1.4.4
+exit: 0
+
+$ mkcert -help 2>&1 | head -30
+Usage of mkcert:
+
+	$ mkcert -install
+	Install the local CA in the system trust store.
+
+	$ mkcert example.org
+	Generate "example.org.pem" and "example.org-key.pem".
+
+	$ mkcert example.com myapp.dev localhost 127.0.0.1 ::1
+	Generate "example.com+4.pem" and "example.com+4-key.pem".
+
+	$ mkcert "*.example.it"
+	Generate "_wildcard.example.it.pem" and "_wildcard.example.it-key.pem".
+
+	$ mkcert -uninstall
+	Uninstall the local CA (but do not delete it).
+
+Advanced options:
+
+	-cert-file FILE, -key-file FILE, -p12-file FILE
+	    Customize the output paths.
+
+	-client
+	    Generate a certificate for client authentication.
+
+	-ecdsa
+	    Generate a certificate with an ECDSA key.
+
+	-pkcs12
+	    Generate a ".p12" PKCS #12 file, also know as a ".pfx" file,
+exit: 0
+
+$ mkcert -CAROOT
+/home/hatch/workspace/build-check/mkcert-scratch/caroot
+exit: 0
+
+$ ls -la $CAROOT
+total 0
+drwxrwx--- 1 root root  0 Oct 28 18:41 .
+drwxrwx--- 1 root root 88 Oct 28 18:41 ..
+exit: 0
+
+$ echo HOME=$HOME TRUST_STORES=$TRUST_STORES
+HOME=/home/hatch/workspace/build-check/mkcert-scratch/home TRUST_STORES=nss
+exit: 0
+
